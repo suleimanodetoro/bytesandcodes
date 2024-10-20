@@ -38,7 +38,7 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="flex items-center mb-4 md:mb-0">
             <Image src="/logo.png" alt="Logo" width={40} height={40} className="mr-2" />
-            <p>Copyright © {currentYear} Bytes & Codes Initiative. All Rights Reserved.</p>
+            <p>Copyright © {currentYear} Bytes & Codes Initiative.</p>
           </div>
           <div className="mb-4 md:mb-0">
             <Link href="/privacy-policy" className="font-bold underline">
