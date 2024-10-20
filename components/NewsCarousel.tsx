@@ -1,38 +1,65 @@
 "use client"
-import { useState } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 const newsItems = [
-  { title: "Annual Fundraiser Success", content: "Our recent fundraiser exceeded expectations, raising over $100,000 for local initiatives." },
-  { title: "New Education Program Launched", content: "We're excited to announce our new after-school tutoring program for underprivileged students." },
-  { title: "Volunteer Appreciation Day", content: "Join us next month as we celebrate the hard work and dedication of our amazing volunteers." },
-  { title: "Community Garden Project", content: "Our urban gardening initiative has now expanded to five new locations across the city." }
+  { 
+    title: "Annual Fundraiser Success", 
+    content: "Our recent fundraiser exceeded expectations, raising over $100,000 for local initiatives.",
+    image: "/images/fundraiser.jpg"
+  },
+  { 
+    title: "New Education Program Launched", 
+    content: "We're excited to announce our new after-school tutoring program for underprivileged students.",
+    image: "/images/education.jpg"
+  },
+  { 
+    title: "Volunteer Appreciation Day", 
+    content: "Join us next month as we celebrate the hard work and dedication of our amazing volunteers.",
+    image: "/images/volunteers.jpg"
+  },
+  { 
+    title: "Community Garden Project", 
+    content: "Our urban gardening initiative has now expanded to five new locations across the city.",
+    image: "/images/garden.jpg"
+  }
 ];
 
 const NewsCarousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const nextSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % newsItems.length);
-  };
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % newsItems.length);
+    }, 3000);
 
-  const prevSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + newsItems.length) % newsItems.length);
-  };
+    return () => clearInterval(interval);
+  }, []);
+
+  const currentItem = newsItems[currentIndex];
 
   return (
-    <div className="relative bg-white p-6 rounded-lg shadow-md">
-      <div className="mb-4">
-        <h3 className="text-xl font-bold">{newsItems[currentIndex].title}</h3>
-        <p className="mt-2">{newsItems[currentIndex].content}</p>
-      </div>
-      <div className="flex justify-between">
-        <button onClick={prevSlide} className="p-2 bg-gray-200 rounded-full">
-          <ChevronLeft size={24} />
-        </button>
-        <button onClick={nextSlide} className="p-2 bg-gray-200 rounded-full">
-          <ChevronRight size={24} />
-        </button>
+    <div className="bg-white p-6 rounded-lg shadow-md">
+      <div className="flex flex-col md:flex-row">
+        <div className="md:w-1/2 pr-4">
+          <h3 className="text-xl font-bold mb-2">{currentItem.title}</h3>
+          <p className="mb-4">{currentItem.content}</p>
+          <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors">
+            Read More
+          </button>
+        </div>
+        {currentItem.image && (
+          <div className="md:w-1/2 mt-4 md:mt-0">
+            <Image 
+              src={currentItem.image} 
+              alt={currentItem.title}
+              width={400}
+              height={300}
+              className="rounded-lg object-cover w-full h-full"
+            />
+          </div>
+        )}
       </div>
     </div>
   );
