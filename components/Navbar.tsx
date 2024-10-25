@@ -74,7 +74,7 @@ const Navbar: React.FC = () => {
     { href: "/blog", label: "Blog" },
     { href: "/gallery", label: "Gallery" },
     { href: "/programs", label: "Programs", subItems: [
-      { href: "/programs/uni-scholarship", label: "Uni Scholarship" },
+      { href: "/programs/scholarship", label: "Uni Scholarship" },
       { href: "/programs/hackathon", label: "Hackathon" }
     ]},
     { href: "/contact", label: "Contact" },
