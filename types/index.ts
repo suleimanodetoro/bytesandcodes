@@ -6,6 +6,7 @@ export interface BlogPost {
     tags: string[];
     excerpt: string;
     content: string;
+    coverImage?: string;
   }
   
  

@@ -3,9 +3,10 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
+import { Search, Tag, Calendar } from 'lucide-react'
 import { BlogPost } from '@/types'
 
-// Helper function to format dates consistently
 function formatDate(dateString: string) {
   const date = new Date(dateString)
   return date.toLocaleDateString('en-US', {
@@ -19,7 +20,6 @@ export default function BlogList({ initialPosts }: { initialPosts: BlogPost[] })
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedTag, setSelectedTag] = useState<string | null>(null)
 
-  // Ensure initialPosts is not undefined and all posts have required fields
   const validPosts = (initialPosts || []).filter(post => 
     post && 
     typeof post.title === 'string' && 
@@ -27,12 +27,10 @@ export default function BlogList({ initialPosts }: { initialPosts: BlogPost[] })
     Array.isArray(post.tags)
   )
 
-  // Get unique tags from all posts
   const allTags = Array.from(
     new Set(validPosts.flatMap((post) => post.tags))
   )
 
-  // Filter posts based on search query and selected tag
   const filteredPosts = validPosts.filter((post) => {
     const matchesSearch = 
       post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -43,41 +41,48 @@ export default function BlogList({ initialPosts }: { initialPosts: BlogPost[] })
 
   if (!validPosts.length) {
     return (
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-8">Blog</h1>
-        <p>No blog posts found. Please make sure your posts are properly formatted.</p>
+      <div className="max-w-4xl mx-auto px-4">
+        <div className="text-center py-12">
+          <p className="text-secondary-600">No blog posts found.</p>
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
-      <h1 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8">Blog</h1>
-      
+    <div className="max-w-7xl mx-auto px-4">
       {/* Search and Filter */}
-      <div className="mb-6 sm:mb-8 space-y-4">
-        <input
-          type="text"
-          placeholder="Search posts..."
-          className="w-full p-2 sm:p-3 border rounded-lg"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
+      <div className="max-w-3xl mx-auto mb-16">
+        <div className="relative mb-6">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary-400" />
+          <input
+            type="text"
+            placeholder="Search posts..."
+            className="w-full pl-12 p-4 rounded-lg border border-secondary-200 
+                     focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
         
         <div className="flex flex-wrap gap-2">
           <button
-            className={`px-3 py-1 rounded-lg text-sm sm:text-base ${
-              !selectedTag ? 'bg-blue-500 text-white' : 'bg-gray-200'
+            className={`px-4 py-2 rounded-lg transition-colors ${
+              !selectedTag 
+                ? 'bg-primary-600 text-white' 
+                : 'bg-primary-50 text-primary-600 hover:bg-primary-100'
             }`}
             onClick={() => setSelectedTag(null)}
           >
-            All
+            All Posts
           </button>
           {allTags.map((tag) => (
             <button
               key={tag}
-              className={`px-3 py-1 rounded-lg text-sm sm:text-base ${
-                selectedTag === tag ? 'bg-blue-500 text-white' : 'bg-gray-200'
+              className={`px-4 py-2 rounded-lg transition-colors ${
+                selectedTag === tag 
+                  ? 'bg-primary-600 text-white' 
+                  : 'bg-primary-50 text-primary-600 hover:bg-primary-100'
               }`}
               onClick={() => setSelectedTag(tag)}
             >
@@ -87,32 +92,58 @@ export default function BlogList({ initialPosts }: { initialPosts: BlogPost[] })
         </div>
       </div>
 
-      {/* Posts List */}
-      <div className="space-y-8">
+      {/* Posts Grid */}
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         {filteredPosts.map((post) => (
-          <article key={post.slug} className="border-b pb-8">
-            <Link href={`/blog/${post.slug}`}>
-              <h2 className="text-xl sm:text-2xl font-bold mb-2 hover:text-blue-500 leading-tight">
-                {post.title}
-              </h2>
-            </Link>
-            <div className="text-sm sm:text-base text-gray-600 mb-2">
-              {formatDate(post.date)}
+          <article key={post.slug} className="bg-white border border-secondary-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
+            {post.coverImage && (
+              <Link href={`/blog/${post.slug}`} className="block aspect-video relative">
+                <Image
+                  src={post.coverImage}
+                  alt={post.title}
+                  fill
+                  className="object-cover"
+                />
+              </Link>
+            )}
+            <div className="p-6">
+              <div className="flex items-center gap-2 text-sm text-secondary-500 mb-4">
+                <Calendar size={16} />
+                {formatDate(post.date)}
+              </div>
+              <Link href={`/blog/${post.slug}`}>
+                <h2 className="text-xl font-bold text-secondary-900 mb-3 hover:text-primary-600 transition-colors">
+                  {post.title}
+                </h2>
+              </Link>
+              <p className="text-secondary-600 mb-4 line-clamp-2">
+                {post.excerpt}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {post.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="inline-flex items-center gap-1 px-3 py-1 rounded-full 
+                             bg-primary-50 text-primary-600 text-sm"
+                  >
+                    <Tag size={14} />
+                    {tag}
+                  </span>
+                ))}
+              </div>
             </div>
-            <div className="flex flex-wrap gap-2 mb-4">
-              {post.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="bg-gray-100 px-2 py-1 rounded text-sm"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-            <p className="text-gray-700 text-sm sm:text-base">{post.excerpt}</p>
           </article>
         ))}
       </div>
+
+      {/* No Results */}
+      {filteredPosts.length === 0 && (
+        <div className="text-center py-12">
+          <p className="text-secondary-600">
+            No posts found matching your search criteria.
+          </p>
+        </div>
+      )}
     </div>
-  );
+  )
 }
