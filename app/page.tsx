@@ -1,5 +1,6 @@
+import CarouselPosts from "@/components/CarouselPost";
+
 // app/page.tsx
-import NewsCarousel from "@/components/NewsCarousel";
 
 const HomePage = () => {
   return (
@@ -91,7 +92,7 @@ const HomePage = () => {
             Latest News
           </h2>
           <div className="w-11/12 md:w-4/5 mx-auto">
-            <NewsCarousel />
+            <CarouselPosts />
           </div>
         </div>
       </section>

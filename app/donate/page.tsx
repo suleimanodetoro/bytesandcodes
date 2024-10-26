@@ -1,132 +1,192 @@
 "use client"
+
 import React, { useState } from 'react';
-import { Heart } from 'lucide-react';
+import { Heart, DollarSign, ArrowRight, Check } from 'lucide-react';
+
+type Frequency = 'one-time' | 'monthly' | 'quarterly' | 'annually';
+type Currency = 'USD' | 'NGN' | 'EUR';
 
 const DonationPage = () => {
-  const [frequency, setFrequency] = useState<string>('one-time');
+  const [frequency, setFrequency] = useState<Frequency>('one-time');
+  const [currency, setCurrency] = useState<Currency>('USD');
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
   const [customAmount, setCustomAmount] = useState<string>('');
+  const [comment, setShowComment] = useState(false);
 
   const amounts = [
-    { value: 25, label: 'USD$ 25' },
-    { value: 50, label: 'USD$ 50' },
-    { value: 100, label: 'USD$ 100' },
-    { value: 250, label: 'USD$ 250' },
-    { value: 500, label: 'USD$ 500' },
+    { value: 25, label: '25' },
+    { value: 50, label: '50' },
+    { value: 100, label: '100' },
+    { value: 250, label: '250' },
+    { value: 500, label: '500' },
   ];
 
+  const currencySymbols = {
+    USD: '$',
+    NGN: '₦',
+    EUR: '€'
+  };
+
   return (
-    <div className="max-w-screen-xl mx-auto px-4 py-12">
-      <div className="flex flex-col md:flex-row justify-between gap-12">
-        {/* Left section */}
-        <div className="flex-1">
-          <div className="flex items-center gap-4 mb-6">
-            <h1 className="text-6xl font-bold text-purple-500">Pledge</h1>
-            <div className="w-16 h-16 flex items-center justify-center">
-              <Heart className="w-12 h-12 text-purple-500" />
+    <main className="min-h-screen bg-white">
+      {/* Header Section */}
+      <section className="bg-primary-50 py-24">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="max-w-3xl">
+            <div className="flex items-center gap-4 mb-6">
+              <h1 className="text-5xl md:text-7xl font-bold text-primary-600">
+                Make a Difference
+              </h1>
+              <Heart className="w-12 h-12 text-primary-600" fill="currentColor" />
             </div>
+            <p className="text-xl text-secondary-600">
+              Your donation helps us empower the next generation of tech leaders. 
+              Support our mission to create accessible opportunities and bridge the digital divide.
+            </p>
           </div>
-          <h1 className="text-6xl font-bold text-purple-500 mb-8">Your Support</h1>
-          <p className="text-xl text-gray-600 mb-4">
-            Be a part of the change - donate to our <span className="text-purple-500">non-profit</span> today and empower women to less priviledged the way towards a more diverse tech industry.
-          </p>
         </div>
+      </section>
 
-        {/* Right section - Donation form */}
-        <div className="flex-1 max-w-md">
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <div className="text-xl font-semibold mb-6">Choose amount</div>
-            
-            {/* Frequency toggle */}
-            <div className="flex gap-2 mb-6 flex-wrap">
-              <button 
-                className={`px-4 py-2 rounded-full ${frequency === 'one-time' ? 'bg-purple-500 text-white' : 'bg-gray-100'}`}
-                onClick={() => setFrequency('one-time')}
-              >
-                One-time
-              </button>
-              <button 
-                className={`px-4 py-2 rounded-full ${frequency === 'monthly' ? 'bg-purple-500 text-white' : 'bg-gray-100'}`}
-                onClick={() => setFrequency('monthly')}
-              >
-                Monthly
-              </button>
-              <button 
-                className={`px-4 py-2 rounded-full ${frequency === 'quarterly' ? 'bg-purple-500 text-white' : 'bg-gray-100'}`}
-                onClick={() => setFrequency('quarterly')}
-              >
-                Quarterly
-              </button>
-              <button 
-                className={`px-4 py-2 rounded-full ${frequency === 'annually' ? 'bg-purple-500 text-white' : 'bg-gray-100'}`}
-                onClick={() => setFrequency('annually')}
-              >
-                Annually
-              </button>
+      {/* Donation Form Section */}
+      <section className="py-24">
+        <div className="max-w-3xl mx-auto px-4">
+          <div className="bg-white rounded-xl border border-secondary-200 shadow-sm p-8">
+            {/* Frequency Selection */}
+            <div className="mb-8">
+              <h2 className="text-xl font-semibold text-secondary-900 mb-4">
+                Donation Frequency
+              </h2>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                {(['one-time', 'monthly', 'quarterly', 'annually'] as const).map((option) => (
+                  <button
+                    key={option}
+                    onClick={() => setFrequency(option)}
+                    className={`
+                      px-4 py-3 rounded-lg font-medium transition-colors
+                      ${frequency === option 
+                        ? 'bg-primary-600 text-white' 
+                        : 'bg-primary-50 text-primary-600 hover:bg-primary-100'
+                      }
+                    `}
+                  >
+                    {option.charAt(0).toUpperCase() + option.slice(1)}
+                  </button>
+                ))}
+              </div>
             </div>
 
-            {/* Currency selector */}
-            <select className="w-full p-3 border rounded-lg mb-6">
-              <option>US Dollars (USD)</option>
-              <option>Nigerian Naira (NGN)</option>
-              <option>Euros (EUR)</option>
-            </select>
-
-            {/* Amount buttons */}
-            <div className="grid grid-cols-2 gap-4 mb-6">
-              {amounts.map((amount) => (
-                <button
-                  key={amount.value}
-                  className={`p-3 rounded-lg border ${
-                    selectedAmount === amount.value 
-                      ? 'border-purple-500 bg-purple-50' 
-                      : 'border-gray-200'
-                  }`}
-                  onClick={() => setSelectedAmount(amount.value)}
-                >
-                  {amount.label}
-                </button>
-              ))}
+            {/* Currency Selection */}
+            <div className="mb-8">
+              <h2 className="text-xl font-semibold text-secondary-900 mb-4">
+                Select Currency
+              </h2>
+              <select
+                value={currency}
+                onChange={(e) => setCurrency(e.target.value as Currency)}
+                className="w-full p-3 rounded-lg border border-secondary-200 
+                         focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              >
+                <option value="USD">US Dollar (USD)</option>
+                <option value="NGN">Nigerian Naira (NGN)</option>
+                <option value="EUR">Euro (EUR)</option>
+              </select>
             </div>
 
-            {/* Custom amount input */}
-            <div className="mb-6">
+            {/* Amount Selection */}
+            <div className="mb-8">
+              <h2 className="text-xl font-semibold text-secondary-900 mb-4">
+                Donation Amount
+              </h2>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
+                {amounts.map((amount) => (
+                  <button
+                    key={amount.value}
+                    onClick={() => {
+                      setSelectedAmount(amount.value);
+                      setCustomAmount('');
+                    }}
+                    className={`
+                      p-4 rounded-lg border transition-colors flex items-center justify-center gap-2
+                      ${selectedAmount === amount.value
+                        ? 'border-primary-600 bg-primary-50 text-primary-600'
+                        : 'border-secondary-200 hover:border-primary-600 hover:bg-primary-50'
+                      }
+                    `}
+                  >
+                    <DollarSign size={18} />
+                    {amount.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Custom Amount */}
               <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">USD$</span>
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary-500">
+                  {currencySymbols[currency]}
+                </span>
                 <input
                   type="text"
-                  placeholder="Custom Amount"
-                  className="w-full p-3 pl-12 border rounded-lg"
+                  placeholder="Enter custom amount"
                   value={customAmount}
-                  onChange={(e) => setCustomAmount(e.target.value)}
+                  onChange={(e) => {
+                    setCustomAmount(e.target.value);
+                    setSelectedAmount(null);
+                  }}
+                  className="w-full pl-10 p-4 rounded-lg border border-secondary-200 
+                           focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 />
               </div>
             </div>
 
-            {/* Comment checkbox */}
-            <div className="mb-6">
-              <label className="flex items-center gap-2">
-                <input type="checkbox" className="form-checkbox text-purple-500" />
-                <span>Write us a comment</span>
+            {/* Comment Option */}
+            <div className="mb-8">
+              <label className="flex items-center gap-3 cursor-pointer">
+                <div className={`
+                  w-6 h-6 rounded-md border-2 flex items-center justify-center
+                  ${comment 
+                    ? 'bg-primary-600 border-primary-600' 
+                    : 'border-secondary-300'
+                  }
+                `}>
+                  {comment && <Check size={16} className="text-white" />}
+                </div>
+                <input
+                  type="checkbox"
+                  checked={comment}
+                  onChange={(e) => setShowComment(e.target.checked)}
+                  className="hidden"
+                />
+                <span className="text-secondary-600">Add a comment to your donation</span>
               </label>
+              
+              {comment && (
+                <textarea
+                  placeholder="Your message (optional)"
+                  className="mt-4 w-full p-4 rounded-lg border border-secondary-200 
+                           focus:ring-2 focus:ring-primary-500 focus:border-transparent
+                           h-32 resize-none"
+                />
+              )}
             </div>
 
-            {/* Next button */}
-            <button className="w-full bg-purple-500 text-white py-3 rounded-lg flex items-center justify-center">
-              Next
-              <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
+            {/* Submit Button */}
+            <button 
+              className="w-full bg-primary-600 text-white py-4 rounded-lg 
+                       hover:bg-primary-700 transition-colors flex items-center 
+                       justify-center font-medium text-lg"
+            >
+              Proceed to Payment
+              <ArrowRight className="ml-2" size={20} />
             </button>
 
-            {/* Powered by text */}
-            <div className="text-center text-sm text-gray-500 mt-4">
-              Powered by Donorbox
-            </div>
+            {/* Secure Payment Note */}
+            <p className="text-center text-secondary-500 text-sm mt-4">
+              Secured by Stripe. Your information is encrypted and secure.
+            </p>
           </div>
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 };
 
