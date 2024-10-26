@@ -1,59 +1,98 @@
+// app/page.tsx
 import NewsCarousel from "@/components/NewsCarousel";
-
 
 const HomePage = () => {
   return (
-    <main className="bg-gray-100">
+    <main className="bg-white">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-green-400 to-blue-500 text-white py-20 text-center">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4">Welcome to Our Non-Profit</h1>
-        <p className="text-lg md:text-xl">Making a difference in the community.</p>
+      <section className="h-screen-90 bg-primary-900 flex items-center justify-center text-white">
+        <div className="max-w-4xl mx-auto text-center px-4">
+          <h1 className="text-5xl md:text-7xl font-bold mb-6">
+            Building Tomorrow's Tech Leaders
+          </h1>
+          <p className="text-xl md:text-2xl text-primary-100">
+            Empowering communities through technology and education.
+          </p>
+        </div>
       </section>
 
       {/* Mission Section */}
-      <section className="max-w-7xl mx-auto py-20 px-4">
-        <h2 className="text-3xl font-bold mb-10 text-center">Our Mission</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {[
-            { title: "Education", content: "Empowering through knowledge" },
-            { title: "Community", content: "Building stronger together" },
-            { title: "Sustainability", content: "Creating a greener future" },
-            { title: "Innovation", content: "Driving positive change" }
-          ].map((card, index) => (
-            <div key={index} className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold mb-2">{card.title}</h3>
-              <p>{card.content}</p>
-            </div>
-          ))}
+      <section className="min-h-screen-80 bg-white py-24">
+        <div className="max-w-7xl mx-auto px-4">
+          <h2 className="text-4xl font-bold mb-16 text-center">Our Mission</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              {
+                title: "Education",
+                content: "Empowering through knowledge and skill development",
+                icon: "🎓"
+              },
+              {
+                title: "Community",
+                content: "Building stronger connections and support networks",
+                icon: "🤝"
+              },
+              {
+                title: "Sustainability",
+                content: "Creating lasting impact for future generations",
+                icon: "🌱"
+              },
+              {
+                title: "Innovation",
+                content: "Driving positive change through technology",
+                icon: "💡"
+              }
+            ].map((card, index) => (
+              <div 
+                key={index} 
+                className="bg-white border border-secondary-200 p-8 rounded-lg hover:shadow-lg transition-shadow"
+              >
+                <div className="text-4xl mb-4">{card.icon}</div>
+                <h3 className="text-xl font-bold mb-3 text-secondary-900">
+                  {card.title}
+                </h3>
+                <p className="text-secondary-600">{card.content}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Impact Section */}
-      <section className="bg-white py-20">
+      <section className="min-h-screen-80 bg-primary-50 py-24">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-10 text-center">Our Impact</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="text-center p-6 bg-gray-100 rounded-lg">
-              <h3 className="text-2xl font-bold mb-2">100+</h3>
-              <p>Volunteers</p>
-            </div>
-            <div className="text-center p-6 bg-gray-100 rounded-lg">
-              <h3 className="text-2xl font-bold mb-2">500+</h3>
-              <p>People Helped</p>
-            </div>
-            <div className="text-center p-6 bg-gray-100 rounded-lg">
-              <h3 className="text-2xl font-bold mb-2">50+</h3>
-              <p>Events Hosted</p>
-            </div>
+          <h2 className="text-4xl font-bold mb-16 text-center text-secondary-900">
+            Our Impact
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              { number: "100+", label: "Volunteers" },
+              { number: "500+", label: "People Helped" },
+              { number: "50+", label: "Events Hosted" }
+            ].map((stat, index) => (
+              <div 
+                key={index} 
+                className="text-center p-8 bg-white rounded-lg shadow-sm"
+              >
+                <h3 className="text-4xl font-bold mb-3 text-primary-600">
+                  {stat.number}
+                </h3>
+                <p className="text-xl text-secondary-600">{stat.label}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* News Section */}
-      <section className="max-w-7xl mx-auto py-20 px-4">
-        <h2 className="text-3xl font-bold mb-10 text-center">Latest News</h2>
-        <div className="w-4/5 mx-auto">
-          <NewsCarousel />
+      <section className="min-h-screen-80 bg-white py-24">
+        <div className="max-w-7xl mx-auto px-4">
+          <h2 className="text-4xl font-bold mb-16 text-center text-secondary-900">
+            Latest News
+          </h2>
+          <div className="w-11/12 md:w-4/5 mx-auto">
+            <NewsCarousel />
+          </div>
         </div>
       </section>
     </main>
