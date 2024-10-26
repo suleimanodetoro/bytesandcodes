@@ -51,22 +51,22 @@ export default function BlogList({ initialPosts }: { initialPosts: BlogPost[] })
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8">Blog</h1>
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+      <h1 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8">Blog</h1>
       
       {/* Search and Filter */}
-      <div className="mb-8 space-y-4">
+      <div className="mb-6 sm:mb-8 space-y-4">
         <input
           type="text"
           placeholder="Search posts..."
-          className="w-full p-2 border rounded"
+          className="w-full p-2 sm:p-3 border rounded-lg"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
         
         <div className="flex flex-wrap gap-2">
           <button
-            className={`px-3 py-1 rounded ${
+            className={`px-3 py-1 rounded-lg text-sm sm:text-base ${
               !selectedTag ? 'bg-blue-500 text-white' : 'bg-gray-200'
             }`}
             onClick={() => setSelectedTag(null)}
@@ -76,7 +76,7 @@ export default function BlogList({ initialPosts }: { initialPosts: BlogPost[] })
           {allTags.map((tag) => (
             <button
               key={tag}
-              className={`px-3 py-1 rounded ${
+              className={`px-3 py-1 rounded-lg text-sm sm:text-base ${
                 selectedTag === tag ? 'bg-blue-500 text-white' : 'bg-gray-200'
               }`}
               onClick={() => setSelectedTag(tag)}
@@ -92,14 +92,14 @@ export default function BlogList({ initialPosts }: { initialPosts: BlogPost[] })
         {filteredPosts.map((post) => (
           <article key={post.slug} className="border-b pb-8">
             <Link href={`/blog/${post.slug}`}>
-              <h2 className="text-2xl font-bold mb-2 hover:text-blue-500">
+              <h2 className="text-xl sm:text-2xl font-bold mb-2 hover:text-blue-500 leading-tight">
                 {post.title}
               </h2>
             </Link>
-            <div className="text-gray-600 mb-2">
+            <div className="text-sm sm:text-base text-gray-600 mb-2">
               {formatDate(post.date)}
             </div>
-            <div className="flex gap-2 mb-4">
+            <div className="flex flex-wrap gap-2 mb-4">
               {post.tags.map((tag) => (
                 <span
                   key={tag}
@@ -109,10 +109,10 @@ export default function BlogList({ initialPosts }: { initialPosts: BlogPost[] })
                 </span>
               ))}
             </div>
-            <p className="text-gray-700">{post.excerpt}</p>
+            <p className="text-gray-700 text-sm sm:text-base">{post.excerpt}</p>
           </article>
         ))}
       </div>
     </div>
-  )
+  );
 }

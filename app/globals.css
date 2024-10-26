@@ -1,6 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* Add after your existing Tailwind imports */
+@import 'prismjs/themes/prism.css';
 
 :root {
   --background: #ffffff; /* Static background color */
