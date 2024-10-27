@@ -23,6 +23,59 @@ const contactFormSchema = z.object({
 
 type ContactFormData = z.infer<typeof contactFormSchema>;
 
+// Form field component
+const FormField = ({ 
+  label, 
+  name, 
+  type = 'text',
+  placeholder,
+  textarea = false,
+  register,
+  errors,
+}: {
+  label: string;
+  name: keyof ContactFormData;
+  type?: string;
+  placeholder: string;
+  textarea?: boolean;
+  register: any;
+  errors: any;
+}) => {
+  const error = errors[name];
+  const Component = textarea ? 'textarea' : 'input';
+
+  return (
+    <div>
+      <label className="block text-sm font-medium text-secondary-700 mb-2">
+        {label}
+      </label>
+      <div className="relative">
+        <Component
+          {...register(name)}
+          type={type}
+          placeholder={placeholder}
+          rows={textarea ? 6 : undefined}
+          className={`
+            w-full px-4 py-3 rounded-lg border
+            ${error ? 'border-red-300' : 'border-secondary-200'}
+            focus:ring-2 focus:ring-primary-500 focus:border-transparent
+            placeholder-secondary-400
+            ${textarea ? 'resize-none' : ''}
+          `}
+        />
+        {error && (
+          <div className="absolute right-0 top-0 pr-3 pt-3">
+            <AlertCircle className="h-5 w-5 text-red-500" />
+          </div>
+        )}
+      </div>
+      {error && (
+        <p className="mt-1 text-sm text-red-600">{error.message}</p>
+      )}
+    </div>
+  );
+};
+
 const ContactPage = () => {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
@@ -39,7 +92,6 @@ const ContactPage = () => {
     setStatus('loading');
     
     try {
-      // Example API call - replace with your actual API endpoint
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: {
@@ -51,9 +103,8 @@ const ContactPage = () => {
       if (!response.ok) throw new Error('Failed to send message');
 
       setStatus('success');
-      reset(); // Clear form on success
+      reset();
       
-      // Reset success message after 5 seconds
       setTimeout(() => {
         setStatus('idle');
       }, 5000);
@@ -63,67 +114,58 @@ const ContactPage = () => {
     }
   };
 
-  // Input field with error handling
-  const FormField = ({ 
-    label, 
-    name, 
-    type = 'text',
-    placeholder,
-    textarea = false 
-  }: {
-    label: string;
-    name: keyof ContactFormData;
-    type?: string;
-    placeholder: string;
-    textarea?: boolean;
-  }) => {
-    const error = errors[name];
-    const Component = textarea ? 'textarea' : 'input';
-
-    return (
-      <div>
-        <label className="block text-sm font-medium text-secondary-700 mb-2">
-          {label}
-        </label>
-        <div className="relative">
-          <Component
-            {...register(name)}
-            type={type}
-            placeholder={placeholder}
-            rows={textarea ? 6 : undefined}
-            className={`
-              w-full px-4 py-3 rounded-lg border
-              ${error ? 'border-red-300' : 'border-secondary-200'}
-              focus:ring-2 focus:ring-primary-500 focus:border-transparent
-              placeholder-secondary-400
-              ${textarea ? 'resize-none' : ''}
-            `}
-          />
-          {error && (
-            <div className="absolute right-0 top-0 pr-3 pt-3">
-              <AlertCircle className="h-5 w-5 text-red-500" />
-            </div>
-          )}
-        </div>
-        {error && (
-          <p className="mt-1 text-sm text-red-600">{error.message}</p>
-        )}
-      </div>
-    );
-  };
-
   return (
     <main className="min-h-screen bg-white">
-      {/* Header Section - Same as before */}
+      {/* Header Section */}
       <section className="bg-primary-50 py-24">
-        {/* ... your existing header code ... */}
+        <div className="max-w-7xl mx-auto px-4">
+          <h1 className="text-5xl md:text-7xl font-bold text-primary-600 mb-6">
+            Contact Us
+          </h1>
+          <p className="text-xl text-secondary-600 max-w-2xl">
+            Have questions about our programs or want to get involved? 
+            We'd love to hear from you. Reach out using the form below.
+          </p>
+        </div>
       </section>
 
       <section className="max-w-7xl mx-auto px-4 py-24">
         <div className="grid md:grid-cols-3 gap-12">
-          {/* Contact Information - Same as before */}
+          {/* Contact Information */}
           <div className="space-y-12">
-            {/* ... your existing contact info code ... */}
+            {[
+              {
+                icon: Mail,
+                title: 'Email',
+                details: 'info@bytesandcodes.org',
+                description: 'Write to us anytime'
+              },
+              {
+                icon: Phone,
+                title: 'Phone',
+                details: '+234 123 456 7890',
+                description: 'Mon-Fri from 9am to 5pm'
+              },
+              {
+                icon: MapPin,
+                title: 'Location',
+                details: 'Lagos, Nigeria',
+                description: 'Request a visit'
+              }
+            ].map((item) => (
+              <div key={item.title} className="flex gap-4">
+                <div className="flex-shrink-0">
+                  <div className="w-12 h-12 rounded-lg bg-primary-50 flex items-center justify-center">
+                    <item.icon className="w-6 h-6 text-primary-600" />
+                  </div>
+                </div>
+                <div>
+                  <h3 className="font-bold text-secondary-900 mb-1">{item.title}</h3>
+                  <p className="text-primary-600 font-medium mb-1">{item.details}</p>
+                  <p className="text-secondary-600 text-sm">{item.description}</p>
+                </div>
+              </div>
+            ))}
           </div>
 
           {/* Contact Form */}
@@ -134,12 +176,16 @@ const ContactPage = () => {
                   label="Name"
                   name="name"
                   placeholder="Your name"
+                  register={register}
+                  errors={errors}
                 />
                 <FormField
                   label="Email"
                   name="email"
                   type="email"
                   placeholder="you@example.com"
+                  register={register}
+                  errors={errors}
                 />
               </div>
               
@@ -147,6 +193,8 @@ const ContactPage = () => {
                 label="Subject"
                 name="subject"
                 placeholder="How can we help?"
+                register={register}
+                errors={errors}
               />
 
               <FormField
@@ -154,6 +202,8 @@ const ContactPage = () => {
                 name="message"
                 placeholder="Tell us about your inquiry..."
                 textarea
+                register={register}
+                errors={errors}
               />
 
               {status === 'success' && (
