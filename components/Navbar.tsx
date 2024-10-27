@@ -121,7 +121,7 @@ const Navbar: React.FC = () => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="text-2xl font-bold text-secondary-900">
-            NonProfit
+            B&C
           </Link>
 
           {/* Desktop Navigation */}
