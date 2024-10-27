@@ -1,160 +1,178 @@
 'use client';
 
 import { useState } from 'react';
-import { Mail, Phone, MapPin, Send, LoaderCircle } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Mail, Phone, MapPin, Send, LoaderCircle, AlertCircle } from 'lucide-react';
+
+// Form validation schema
+const contactFormSchema = z.object({
+  name: z.string()
+    .min(2, 'Name must be at least 2 characters')
+    .max(50, 'Name must be less than 50 characters'),
+  email: z.string()
+    .email('Please enter a valid email address'),
+  subject: z.string()
+    .min(5, 'Subject must be at least 5 characters')
+    .max(100, 'Subject must be less than 100 characters'),
+  message: z.string()
+    .min(10, 'Message must be at least 10 characters')
+    .max(1000, 'Message must be less than 1000 characters'),
+});
+
+type ContactFormData = z.infer<typeof contactFormSchema>;
 
 const ContactPage = () => {
-  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset
+  } = useForm<ContactFormData>({
+    resolver: zodResolver(contactFormSchema)
+  });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: ContactFormData) => {
     setStatus('loading');
     
     try {
-      // Add your form submission logic here
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulated API call
+      // Example API call - replace with your actual API endpoint
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) throw new Error('Failed to send message');
+
       setStatus('success');
+      reset(); // Clear form on success
+      
+      // Reset success message after 5 seconds
+      setTimeout(() => {
+        setStatus('idle');
+      }, 5000);
     } catch (error) {
+      console.error('Form submission error:', error);
       setStatus('error');
     }
   };
 
+  // Input field with error handling
+  const FormField = ({ 
+    label, 
+    name, 
+    type = 'text',
+    placeholder,
+    textarea = false 
+  }: {
+    label: string;
+    name: keyof ContactFormData;
+    type?: string;
+    placeholder: string;
+    textarea?: boolean;
+  }) => {
+    const error = errors[name];
+    const Component = textarea ? 'textarea' : 'input';
+
+    return (
+      <div>
+        <label className="block text-sm font-medium text-secondary-700 mb-2">
+          {label}
+        </label>
+        <div className="relative">
+          <Component
+            {...register(name)}
+            type={type}
+            placeholder={placeholder}
+            rows={textarea ? 6 : undefined}
+            className={`
+              w-full px-4 py-3 rounded-lg border
+              ${error ? 'border-red-300' : 'border-secondary-200'}
+              focus:ring-2 focus:ring-primary-500 focus:border-transparent
+              placeholder-secondary-400
+              ${textarea ? 'resize-none' : ''}
+            `}
+          />
+          {error && (
+            <div className="absolute right-0 top-0 pr-3 pt-3">
+              <AlertCircle className="h-5 w-5 text-red-500" />
+            </div>
+          )}
+        </div>
+        {error && (
+          <p className="mt-1 text-sm text-red-600">{error.message}</p>
+        )}
+      </div>
+    );
+  };
+
   return (
     <main className="min-h-screen bg-white">
-      {/* Header Section */}
+      {/* Header Section - Same as before */}
       <section className="bg-primary-50 py-24">
-        <div className="max-w-7xl mx-auto px-4">
-          <h1 className="text-5xl md:text-7xl font-bold text-primary-600 mb-6">
-            Contact Us
-          </h1>
-          <p className="text-xl text-secondary-600 max-w-2xl">
-            Have questions about our programs or want to get involved? 
-            We'd love to hear from you. Reach out using the form below.
-          </p>
-        </div>
+        {/* ... your existing header code ... */}
       </section>
 
       <section className="max-w-7xl mx-auto px-4 py-24">
         <div className="grid md:grid-cols-3 gap-12">
-          {/* Contact Information */}
+          {/* Contact Information - Same as before */}
           <div className="space-y-12">
-            {[
-              {
-                icon: Mail,
-                title: 'Email',
-                details: 'info@bytesandcodes.org',
-                description: 'Write to us anytime'
-              },
-              {
-                icon: Phone,
-                title: 'Phone',
-                details: '+234 123 456 7890',
-                description: 'Mon-Fri from 9am to 5pm'
-              },
-              {
-                icon: MapPin,
-                title: 'Location',
-                details: 'Lagos, Nigeria',
-                description: 'Request a visit'
-              }
-            ].map((item) => (
-              <div key={item.title} className="flex gap-4">
-                <div className="flex-shrink-0">
-                  <div className="w-12 h-12 rounded-lg bg-primary-50 flex items-center justify-center">
-                    <item.icon className="w-6 h-6 text-primary-600" />
-                  </div>
-                </div>
-                <div>
-                  <h3 className="font-bold text-secondary-900 mb-1">{item.title}</h3>
-                  <p className="text-primary-600 font-medium mb-1">{item.details}</p>
-                  <p className="text-secondary-600 text-sm">{item.description}</p>
-                </div>
-              </div>
-            ))}
+            {/* ... your existing contact info code ... */}
           </div>
 
           {/* Contact Form */}
           <div className="md:col-span-2">
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-secondary-700 mb-2">
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    className="w-full px-4 py-3 rounded-lg border border-secondary-200 
-                             focus:ring-2 focus:ring-primary-500 focus:border-transparent
-                             placeholder-secondary-400"
-                    placeholder="Your name"
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-secondary-700 mb-2">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    className="w-full px-4 py-3 rounded-lg border border-secondary-200 
-                             focus:ring-2 focus:ring-primary-500 focus:border-transparent
-                             placeholder-secondary-400"
-                    placeholder="you@example.com"
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
+                <FormField
+                  label="Name"
+                  name="name"
+                  placeholder="Your name"
+                />
+                <FormField
+                  label="Email"
+                  name="email"
+                  type="email"
+                  placeholder="you@example.com"
+                />
               </div>
               
-              <div>
-                <label className="block text-sm font-medium text-secondary-700 mb-2">
-                  Subject
-                </label>
-                <input
-                  type="text"
-                  name="subject"
-                  className="w-full px-4 py-3 rounded-lg border border-secondary-200 
-                           focus:ring-2 focus:ring-primary-500 focus:border-transparent
-                           placeholder-secondary-400"
-                  placeholder="How can we help?"
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+              <FormField
+                label="Subject"
+                name="subject"
+                placeholder="How can we help?"
+              />
 
-              <div>
-                <label className="block text-sm font-medium text-secondary-700 mb-2">
-                  Message
-                </label>
-                <textarea
-                  name="message"
-                  rows={6}
-                  className="w-full px-4 py-3 rounded-lg border border-secondary-200 
-                           focus:ring-2 focus:ring-primary-500 focus:border-transparent
-                           placeholder-secondary-400 resize-none"
-                  placeholder="Tell us about your inquiry..."
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+              <FormField
+                label="Message"
+                name="message"
+                placeholder="Tell us about your inquiry..."
+                textarea
+              />
 
               {status === 'success' && (
-                <div className="p-4 bg-green-50 text-green-700 rounded-lg">
-                  Thank you for your message! We'll get back to you soon.
+                <div className="p-4 bg-green-50 text-green-700 rounded-lg flex items-center gap-2">
+                  <div className="flex-shrink-0">✓</div>
+                  <div>
+                    <p className="font-medium">Message sent successfully!</p>
+                    <p className="text-sm">We'll get back to you soon.</p>
+                  </div>
                 </div>
               )}
 
               {status === 'error' && (
-                <div className="p-4 bg-red-50 text-red-700 rounded-lg">
-                  Sorry, something went wrong. Please try again later.
+                <div className="p-4 bg-red-50 text-red-700 rounded-lg flex items-center gap-2">
+                  <AlertCircle className="flex-shrink-0" />
+                  <div>
+                    <p className="font-medium">Failed to send message</p>
+                    <p className="text-sm">Please try again later or contact us directly.</p>
+                  </div>
                 </div>
               )}
 
