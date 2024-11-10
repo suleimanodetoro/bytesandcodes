@@ -137,7 +137,7 @@ const ContactPage = () => {
               {
                 icon: Mail,
                 title: 'Email',
-                details: 'info@bytesandcodes.org',
+                details: 'info@bytesandcodes.com',
                 description: 'Write to us anytime'
               },
               {
