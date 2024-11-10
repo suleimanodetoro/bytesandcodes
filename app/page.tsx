@@ -1,13 +1,34 @@
-import CarouselPosts from "@/components/CarouselPost";
-
 // app/page.tsx
+import AnimatedCounter from "@/components/AnimatedCounter";
+import CarouselPosts from "@/components/CarouselPost";
+import Image from "next/image";
 
 const HomePage = () => {
+  const impactStats = [
+    { number: 100, label: "Volunteers", suffix: "+" },
+    { number: 5000000, label: "Funds Deployed", suffix: "+" },
+    { number: 10, label: "Events Hosted", suffix: "+" }
+  ];
+
   return (
     <main className="bg-white">
       {/* Hero Section */}
-      <section className="h-screen-90 bg-primary-900 flex items-center justify-center text-white">
-        <div className="max-w-4xl mx-auto text-center px-4">
+      <section className="relative h-screen-90 flex items-center justify-center text-white overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          <Image
+            src="/images/coding_image.jpg"
+            alt="Coding background"
+            fill
+            className="object-cover"
+            priority
+          />
+          {/* Overlay */}
+          <div className="absolute inset-0 bg-primary-900/80" />
+        </div>
+
+        {/* Content */}
+        <div className="relative z-10 max-w-4xl mx-auto text-center px-4">
           <h1 className="text-5xl md:text-7xl font-bold mb-6">
             Building Tomorrow's Tech Leaders
           </h1>
@@ -26,26 +47,26 @@ const HomePage = () => {
               {
                 title: "Education",
                 content: "Empowering through knowledge and skill development",
-                icon: "🎓"
+                icon: "🎓",
               },
               {
                 title: "Community",
                 content: "Building stronger connections and support networks",
-                icon: "🤝"
+                icon: "🤝",
               },
               {
                 title: "Sustainability",
                 content: "Creating lasting impact for future generations",
-                icon: "🌱"
+                icon: "🌱",
               },
               {
                 title: "Innovation",
                 content: "Driving positive change through technology",
-                icon: "💡"
-              }
+                icon: "💡",
+              },
             ].map((card, index) => (
-              <div 
-                key={index} 
+              <div
+                key={index}
                 className="bg-white border border-secondary-200 p-8 rounded-lg hover:shadow-lg transition-shadow"
               >
                 <div className="text-4xl mb-4">{card.icon}</div>
@@ -59,24 +80,23 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Impact Section */}
+      {/* Impact Section - Updated with animated counter */}
       <section className="min-h-screen-80 bg-primary-50 py-24">
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-4xl font-bold mb-16 text-center text-secondary-900">
             Our Impact
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { number: "100+", label: "Volunteers" },
-              { number: "500+", label: "People Helped" },
-              { number: "50+", label: "Events Hosted" }
-            ].map((stat, index) => (
+            {impactStats.map((stat, index) => (
               <div 
                 key={index} 
                 className="text-center p-8 bg-white rounded-lg shadow-sm"
               >
                 <h3 className="text-4xl font-bold mb-3 text-primary-600">
-                  {stat.number}
+                  <AnimatedCounter 
+                    end={stat.number}
+                    suffix={stat.suffix}
+                  />
                 </h3>
                 <p className="text-xl text-secondary-600">{stat.label}</p>
               </div>
