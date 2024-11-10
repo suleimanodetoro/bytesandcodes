@@ -8,9 +8,10 @@ interface AnimatedCounterProps {
   end: number;
   duration?: number;
   suffix?: string;
+  prefix?: string;
 }
 
-const AnimatedCounter = ({ end, duration = 2000, suffix = '' }: AnimatedCounterProps) => {
+const AnimatedCounter = ({ end, duration = 2000, suffix = '', prefix='' }: AnimatedCounterProps) => {
   const [count, setCount] = useState(0);
   const { ref, inView } = useInView({
     threshold: 0.3,
@@ -50,7 +51,7 @@ const AnimatedCounter = ({ end, duration = 2000, suffix = '' }: AnimatedCounterP
 
   return (
     <span ref={ref} className="tabular-nums">
-      {formatNumber(count)}{suffix}
+      {prefix}{formatNumber(count)}{suffix}
     </span>
   );
 };

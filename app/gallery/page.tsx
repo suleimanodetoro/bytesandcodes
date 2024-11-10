@@ -20,7 +20,7 @@ const galleryData = [
     {
       id: 3,
       title: 'Coding Bootcamp for Young Women in Tech',
-      date: 'Lagos | Saturday, July 15, 2023',
+      date: 'Abuja | Saturday, July 15, 2023',
       organization: 'Bytes and Codes',
       imageUrl: 'https://images.unsplash.com/photo-1516802273409-68526ee1bdd6',
     },

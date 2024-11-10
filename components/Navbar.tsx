@@ -130,45 +130,46 @@ const Navbar: React.FC = () => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-  <svg
-    viewBox="0 0 24 24"
-    className="w-8 h-8 text-primary-600"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    {/* Center square */}
-    <rect x="8" y="8" width="8" height="8" />
+            <svg
+              viewBox="0 0 24 24"
+              className="w-8 h-8 text-primary-600"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              {/* Center square */}
+              <rect x="8" y="8" width="8" height="8" />
 
-    {/* Circuit connections - horizontal and vertical */}
-    <line x1="2" y1="12" x2="8" y2="12" />
-    <line x1="16" y1="12" x2="22" y2="12" />
-    <line x1="12" y1="2" x2="12" y2="8" />
-    <line x1="12" y1="16" x2="12" y2="22" />
+              {/* Circuit connections - horizontal and vertical */}
+              <line x1="2" y1="12" x2="8" y2="12" />
+              <line x1="16" y1="12" x2="22" y2="12" />
+              <line x1="12" y1="2" x2="12" y2="8" />
+              <line x1="12" y1="16" x2="12" y2="22" />
 
-    {/* Circular nodes on circuit connections */}
-    <circle cx="2" cy="12" r="1" />
-    <circle cx="22" cy="12" r="1" />
-    <circle cx="12" cy="2" r="1" />
-    <circle cx="12" cy="22" r="1" />
+              {/* Circular nodes on circuit connections */}
+              <circle cx="2" cy="12" r="1" />
+              <circle cx="22" cy="12" r="1" />
+              <circle cx="12" cy="2" r="1" />
+              <circle cx="12" cy="22" r="1" />
 
-    {/* Diagonal connections */}
-    <line x1="4" y1="4" x2="8" y2="8" />
-    <line x1="20" y1="4" x2="16" y2="8" />
-    <line x1="4" y1="20" x2="8" y2="16" />
-    <line x1="20" y1="20" x2="16" y2="16" />
+              {/* Diagonal connections */}
+              <line x1="4" y1="4" x2="8" y2="8" />
+              <line x1="20" y1="4" x2="16" y2="8" />
+              <line x1="4" y1="20" x2="8" y2="16" />
+              <line x1="20" y1="20" x2="16" y2="16" />
 
-    {/* Circular nodes on diagonal connections */}
-    <circle cx="4" cy="4" r="1" />
-    <circle cx="20" cy="4" r="1" />
-    <circle cx="4" cy="20" r="1" />
-    <circle cx="20" cy="20" r="1" />
-  </svg>
-  <span className="text-2xl font-bold text-secondary-900">Bytes & Codes</span>
-</Link>
-
+              {/* Circular nodes on diagonal connections */}
+              <circle cx="4" cy="4" r="1" />
+              <circle cx="20" cy="4" r="1" />
+              <circle cx="4" cy="20" r="1" />
+              <circle cx="20" cy="20" r="1" />
+            </svg>
+            <span className="text-2xl font-bold text-secondary-900">
+              Bytes & Codes
+            </span>
+          </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-2">

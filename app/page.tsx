@@ -2,11 +2,27 @@
 import AnimatedCounter from "@/components/AnimatedCounter";
 import CarouselPosts from "@/components/CarouselPost";
 import Image from "next/image";
+import { Metadata } from 'next';
+import siteConfig from '@/lib/metadata';
+
+
+export const metadata: Metadata = {
+  title: siteConfig.title, // Uses default title
+  openGraph: {
+    title: siteConfig.title,
+    description: siteConfig.description,
+    url: siteConfig.url,
+    siteName: siteConfig.siteName,
+    images: siteConfig.openGraph.images,
+    locale: siteConfig.locale,
+    type: 'website',
+  },
+};
 
 const HomePage = () => {
   const impactStats = [
     { number: 100, label: "Volunteers", suffix: "+" },
-    { number: 5000000, label: "Funds Deployed", suffix: "+" },
+    { number: 5000000, label: "Funds Deployed", suffix: "+", prefix: "₦" },
     { number: 10, label: "Events Hosted", suffix: "+" }
   ];
 
@@ -96,6 +112,7 @@ const HomePage = () => {
                   <AnimatedCounter 
                     end={stat.number}
                     suffix={stat.suffix}
+                    prefix={stat.prefix}
                   />
                 </h3>
                 <p className="text-xl text-secondary-600">{stat.label}</p>

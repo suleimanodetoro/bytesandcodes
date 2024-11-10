@@ -149,7 +149,7 @@ const ContactPage = () => {
               {
                 icon: MapPin,
                 title: 'Location',
-                details: 'Lagos, Nigeria',
+                details: 'Abuja, Nigeria',
                 description: 'Request a visit'
               }
             ].map((item) => (
