@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Mail, Phone, MapPin, Send, LoaderCircle, AlertCircle } from 'lucide-react';
+import type { ContactFormData, FormFieldProps } from '@/types/forms';
 
 // Form validation schema
 const contactFormSchema = z.object({
@@ -21,30 +22,21 @@ const contactFormSchema = z.object({
     .max(1000, 'Message must be less than 1000 characters'),
 });
 
-type ContactFormData = z.infer<typeof contactFormSchema>;
 
 // Form field component
 const FormField = ({ 
-  label, 
-  name, 
-  type = 'text',
-  placeholder,
-  textarea = false,
-  register,
-  errors,
-}: {
-  label: string;
-  name: keyof ContactFormData;
-  type?: string;
-  placeholder: string;
-  textarea?: boolean;
-  register: any;
-  errors: any;
-}) => {
-  const error = errors[name];
-  const Component = textarea ? 'textarea' : 'input';
-
-  return (
+    label, 
+    name, 
+    type = 'text',
+    placeholder,
+    textarea = false,
+    register,
+    errors,
+  }: FormFieldProps) => {
+    const error = errors[name];
+    const Component = textarea ? 'textarea' : 'input';
+  
+    return (
     <div>
       <label className="block text-sm font-medium text-secondary-700 mb-2">
         {label}

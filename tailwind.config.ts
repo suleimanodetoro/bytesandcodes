@@ -1,4 +1,9 @@
+// tailwind.config.ts
 import type { Config } from "tailwindcss";
+import typography from "@tailwindcss/typography";
+
+// Define the ThemeFunction type
+type ThemeFunction = (path: string, defaultValue?: any) => any;
 
 const config: Config = {
   content: [
@@ -49,7 +54,7 @@ const config: Config = {
         'screen-90': '90vh',
         'screen-80': '80vh',
       },
-      typography: (theme) => ({
+      typography: (theme: ThemeFunction) => ({
         DEFAULT: {
           css: {
             maxWidth: 'none',
@@ -106,7 +111,7 @@ const config: Config = {
     },
   },
   plugins: [
-    require('@tailwindcss/typography'),
+    typography,
   ],
 };
 

@@ -1,7 +1,10 @@
-// next.config.mjs
 import createMDX from '@next/mdx';
 import remarkGfm from 'remark-gfm';
 import rehypePrism from '@mapbox/rehype-prism';
+import { fileURLToPath } from 'url';
+import path from 'path';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -9,19 +12,33 @@ const nextConfig = {
     domains: ['images.unsplash.com', 'unsplash.com'],
   },
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
-  webpack: (config, { isServer }) => {
+  webpack: (config, { isServer, dev }) => {
+    // Fixes npm packages that depend on `fs` module
     if (!isServer) {
-      // Don't resolve 'fs' and 'path' modules on the client to prevent this error
       config.resolve.fallback = {
         fs: false,
         path: false,
       };
     }
+
+    // Comment out the custom cache configuration cause its crashing lmfao
+    // if (!dev) {
+    //   config.cache = {
+    //     type: 'filesystem',
+    //     buildDependencies: {
+    //       config: [path.join(__dirname, 'next.config.mjs')],
+    //     },
+    //     name: isServer ? 'server' : 'client',
+    //   };
+    // }
+
     return config;
+  },
+  env: {
+    SITE_URL: process.env.SITE_URL || 'https://bytesandcodes.org',
   },
 };
 
-// Create the MDX configuration
 const withMDX = createMDX({
   options: {
     remarkPlugins: [remarkGfm],
@@ -29,5 +46,4 @@ const withMDX = createMDX({
   },
 });
 
-// Export the combined configuration
 export default withMDX(nextConfig);
