@@ -1,21 +1,44 @@
-"use client"
+"use client";
 
-import { useState } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { Linkedin, Twitter, Instagram, Mail } from 'lucide-react';
+import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { Linkedin, Twitter, Instagram, Mail } from "lucide-react";
 
 const Footer = () => {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
+    setMessage("");
+
     try {
-      // Add your newsletter subscription logic here
-      console.log('Subscribed:', email);
-      setEmail('');
+      const response = await fetch(
+        `https://api.convertkit.com/v3/forms/${process.env.NEXT_PUBLIC_CONVERTKIT_FORM_ID}/subscribe`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email,
+            api_key: process.env.NEXT_PUBLIC_CONVERTKIT_API_KEY,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to subscribe. Please try again.");
+      }
+
+      setMessage("Thank you for subscribing!");
+      setEmail("");
     } catch (error) {
-      console.error('Newsletter subscription failed:', error);
+      console.error("Subscription failed:", error);
+      setMessage("An error occurred. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -26,7 +49,7 @@ const Footer = () => {
         { label: "Scholarship", href: "/programs/scholarship" },
         { label: "Hackathon", href: "/programs/hackathon" },
         { label: "Workshops", href: "/programs/workshops" },
-      ]
+      ],
     },
     {
       title: "About",
@@ -34,7 +57,7 @@ const Footer = () => {
         { label: "Our Story", href: "/about" },
         { label: "Blog", href: "/blog" },
         { label: "Gallery", href: "/gallery" },
-      ]
+      ],
     },
     {
       title: "Support",
@@ -42,31 +65,31 @@ const Footer = () => {
         { label: "Contact", href: "/contact" },
         { label: "Donate", href: "/donate" },
         { label: "Volunteer", href: "/volunteer" },
-      ]
-    }
+      ],
+    },
   ];
 
   const socialLinks = [
-    { 
-      icon: Twitter, 
+    {
+      icon: Twitter,
       href: "https://twitter.com/bytesandcodes",
-      label: "Twitter"
+      label: "Twitter",
     },
-    { 
-      icon: Linkedin, 
+    {
+      icon: Linkedin,
       href: "https://linkedin.com/company/bytesandcodes",
-      label: "LinkedIn"
+      label: "LinkedIn",
     },
-    { 
-      icon: Instagram, 
+    {
+      icon: Instagram,
       href: "https://instagram.com/bytesandcodes",
-      label: "Instagram"
+      label: "Instagram",
     },
-    { 
-      icon: Mail, 
+    {
+      icon: Mail,
       href: "mailto:info@bytesandcodes.com",
-      label: "Email"
-    }
+      label: "Email",
+    },
   ];
 
   return (
@@ -78,7 +101,7 @@ const Footer = () => {
           <div className="space-y-6">
             <Link href="/" className="inline-block">
               <Image
-                src="/logo.png"
+                src="/favicon.png"
                 alt="Bytes & Codes Initiative"
                 width={150}
                 height={40}
@@ -86,7 +109,7 @@ const Footer = () => {
               />
             </Link>
             <p className="text-secondary-300 text-sm">
-              Empowering the next generation of tech leaders through education, 
+              Empowering the next generation of tech leaders through education,
               innovation, and community building.
             </p>
           </div>
@@ -98,7 +121,7 @@ const Footer = () => {
               <ul className="space-y-3">
                 {section.links.map((link) => (
                   <li key={link.href}>
-                    <Link 
+                    <Link
                       href={link.href}
                       className="text-secondary-300 hover:text-white transition-colors text-sm"
                     >
@@ -116,33 +139,39 @@ const Footer = () => {
           <div className="max-w-md mx-auto text-center">
             <h3 className="text-lg font-semibold mb-4">Stay Updated</h3>
             <p className="text-secondary-300 text-sm mb-4">
-              Subscribe to our newsletter for the latest updates and opportunities.
+              Subscribe to our newsletter for the latest updates and
+              opportunities.
             </p>
-            <form onSubmit={handleSubmit} className="flex">
+            <form onSubmit={handleSubmit} className="flex flex-col items-center">
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
-                className="flex-grow px-4 py-2 rounded-l-lg text-secondary-900 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="flex-grow px-4 py-2 rounded-lg text-secondary-900 focus:outline-none focus:ring-2 focus:ring-primary-500 w-full mb-4"
                 required
               />
-              <button 
+              <button
                 type="submit"
-                className="bg-primary-600 px-6 py-2 rounded-r-lg hover:bg-primary-700 transition-colors"
+                disabled={loading}
+                className="bg-primary-600 px-6 py-2 rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Subscribe
+                {loading ? "Subscribing..." : "Subscribe"}
               </button>
             </form>
+            {message && (
+              <p className="text-secondary-300 text-sm mt-4">{message}</p>
+            )}
           </div>
         </div>
 
         {/* Bottom Bar */}
         <div className="border-t border-secondary-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="text-secondary-300 text-sm">
-            © {new Date().getFullYear()} Bytes & Codes Initiative. All rights reserved.
+            © {new Date().getFullYear()} Bytes & Codes Initiative. All rights
+            reserved.
           </div>
-          
+
           {/* Social Links */}
           <div className="flex items-center space-x-6">
             {socialLinks.map((social) => (
@@ -161,14 +190,14 @@ const Footer = () => {
 
           {/* Legal Links */}
           <div className="flex items-center space-x-6 text-sm">
-            <Link 
-              href="/privacy" 
+            <Link
+              href="/privacy"
               className="text-secondary-300 hover:text-white transition-colors"
             >
               Privacy Policy
             </Link>
-            <Link 
-              href="/terms" 
+            <Link
+              href="/terms"
               className="text-secondary-300 hover:text-white transition-colors"
             >
               Terms of Service

@@ -1,6 +1,7 @@
 // app/layout.tsx
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { Playfair_Display } from 'next/font/google'; 
 import Navbar from '../components/Navbar';
 import "./globals.css";
 import Footer from "@/components/Footer";
@@ -17,6 +18,12 @@ const geistMono = localFont({
   src: "./fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
   weight: "100 900",
+});
+
+// Add Playfair Display configuration
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  variable: '--font-playfair',
 });
 
 export const metadata: Metadata = {
@@ -50,7 +57,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} font-sans antialiased`}
       >
         <Navbar />
         {children}

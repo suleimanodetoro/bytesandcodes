@@ -14,6 +14,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      animation: {
+        'spin-slow': 'spin 8s linear infinite',
+      },
       colors: {
         primary: {
           50: '#f0fdf4',
@@ -49,6 +52,8 @@ const config: Config = {
       fontFamily: {
         sans: ['GeistVF', 'sans-serif'],
         mono: ['GeistMonoVF', 'monospace'],
+        // Add the serif font configuration here
+        serif: ['Playfair Display', 'Georgia', 'Cambria', 'Times New Roman', 'serif'],
       },
       height: {
         'screen-90': '90vh',
@@ -62,11 +67,11 @@ const config: Config = {
             fontSize: theme('fontSize.base'),
             lineHeight: theme('lineHeight.relaxed'),
             a: {
-              color: theme('colors.red.500'), // Red link color
+              color: theme('colors.red.500'),
               '&:hover': {
-                color: theme('colors.red.700'), // Hover color for links
+                color: theme('colors.red.700'),
               },
-              textDecoration: 'underline', // Underlined links
+              textDecoration: 'underline',
               fontWeight: theme('fontWeight.medium'),
             },
             p: {
@@ -92,15 +97,15 @@ const config: Config = {
               color: theme('colors.gray.600'),
             },
             pre: {
-              backgroundColor: theme('colors.gray.900'), // Dark background for code blocks
-              color: theme('colors.gray.100'), // Light text color for readability
-              padding: theme('spacing.4'), // Padding for better spacing
-              borderRadius: theme('borderRadius.lg'), // Rounded corners
-              overflowX: 'auto', // Enable horizontal scrolling
+              backgroundColor: theme('colors.gray.900'),
+              color: theme('colors.gray.100'),
+              padding: theme('spacing.4'),
+              borderRadius: theme('borderRadius.lg'),
+              overflowX: 'auto',
             },
             code: {
               backgroundColor: theme('colors.gray.100'),
-              color: theme('colors.red.500'), // Adjusted color for inline code
+              color: theme('colors.red.500'),
               padding: '0.2em 0.4em',
               borderRadius: theme('borderRadius.sm'),
               fontWeight: 'normal',
