@@ -1,3 +1,5 @@
+//app/programs/scholarship/page.tsx
+
 import React from 'react';
 
 const ScholarshipPage = () => {

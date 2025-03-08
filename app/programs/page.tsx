@@ -1,3 +1,5 @@
+//app/programs/page.tsx
+
 import React from 'react';
 import Link from 'next/link';
 import { ArrowRight, GraduationCap, Code } from 'lucide-react';

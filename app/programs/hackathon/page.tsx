@@ -1,3 +1,4 @@
+//app/programs/hackathon/page.tsx
 import React from 'react';
 
 const HackathonPage = () => {

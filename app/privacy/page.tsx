@@ -1,3 +1,4 @@
+//app/privacy/page.tsx
 import { Shield, Mail, AlertCircle } from "lucide-react";
 
 const PrivacyPolicyPage = () => {
