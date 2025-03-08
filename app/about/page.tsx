@@ -143,7 +143,7 @@ const About = () => {
               </div>
               <p className="text-secondary-600">
                 With exceptional talent for building connections, Kehinde
-                designs and implements our community engagement strategies. His
+                designs and implements our community engagement strategies. Her
                 work has established vital partnerships with educational
                 institutions and tech companies across Nigeria.
               </p>

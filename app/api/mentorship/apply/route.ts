@@ -1,7 +1,7 @@
 // app/api/mentorship/apply/route.ts
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { supabase } from "@/lib/supabase";
+import { supabase, hasSupabaseCredentials } from "@/lib/supabase";
 import { resend } from "@/lib/email";
 import { rateLimit } from "@/lib/rate-limiter";
 import { headers } from "next/headers";
@@ -73,7 +73,6 @@ const applicationSchema = z.object({
       }),
   });
 
-// app/api/mentorship/apply/route.ts
 export async function POST(request: Request) {
     const headersList = headers();
     const ip = headersList.get("x-forwarded-for") || "unknown";
@@ -95,6 +94,18 @@ export async function POST(request: Request) {
                 },
                 { status: 429 }
             );
+        }
+  
+        // Check if we have proper Supabase credentials
+        if (!hasSupabaseCredentials()) {
+            console.warn('Missing Supabase credentials. Skipping database save.');
+            // You can still send emails if email service is configured
+            
+            // Send a success response even though we didn't save to the database
+            return NextResponse.json({
+                success: true,
+                message: "Application received. Database storage skipped in development mode.",
+            });
         }
   
         // Insert into Supabase

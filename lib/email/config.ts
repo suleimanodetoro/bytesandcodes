@@ -1,11 +1,14 @@
 // lib/email/config.ts
 import { Resend } from 'resend';
 
-if (!process.env.RESEND_API_KEY) {
-  throw new Error('Missing RESEND_API_KEY environment variable');
-}
+// Provide a fallback for build time
+const resendApiKey = process.env.RESEND_API_KEY || 'placeholder-key';
+export const resend = new Resend(resendApiKey);
 
-export const resend = new Resend(process.env.RESEND_API_KEY);
+// Helper to check if email service is properly configured
+export const hasEmailCredentials = () => {
+  return process.env.RESEND_API_KEY && process.env.RESEND_API_KEY !== 'placeholder-key';
+};
 
 export const emailConfig = {
   from: {
@@ -82,7 +85,7 @@ The Bytes & Codes Team
       areasOfInterest: string[];
       applicationId: string;
     }) => ({
-      to: [process.env.ADMIN_EMAIL!],
+      to: [process.env.ADMIN_EMAIL || 'admin@example.com'], // Fallback for build
       from: "Mentorship Applications <mentorship@bytesandcodes.org>",
       subject: "New AWS Cloud Mentorship Application",
       text: `
@@ -93,7 +96,7 @@ Email: ${data.email}
 Experience Level: ${data.experienceLevel}
 Areas of Interest: ${data.areasOfInterest.join(', ')}
 
-Review Application: ${process.env.NEXT_PUBLIC_ADMIN_URL}/applications/${data.applicationId}
+Review Application: ${process.env.NEXT_PUBLIC_ADMIN_URL || 'https://admin.example.com'}/applications/${data.applicationId}
       `,
       html: `
         <!DOCTYPE html>
@@ -124,7 +127,7 @@ Review Application: ${process.env.NEXT_PUBLIC_ADMIN_URL}/applications/${data.app
                 <p><strong>Experience Level:</strong> ${data.experienceLevel}</p>
                 <p><strong>Areas of Interest:</strong> ${data.areasOfInterest.join(', ')}</p>
               </div>
-              <a href="${process.env.NEXT_PUBLIC_ADMIN_URL}/applications/${data.applicationId}" 
+              <a href="${process.env.NEXT_PUBLIC_ADMIN_URL || 'https://admin.example.com'}/applications/${data.applicationId}" 
                  class="review-button">Review Application</a>
             </div>
           </body>
