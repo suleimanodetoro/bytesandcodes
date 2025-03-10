@@ -2,7 +2,7 @@
 const siteConfig = {
     title: "Bytes & Codes Initiative",
     description: "Empowering communities through technology and education. Building tomorrow's tech leaders through mentorship, education, and innovation.",
-    url: "https://bytesandcodes.com", // Replace with your actual domain
+    url: "https://bytesandcodes.org",
     siteName: "Bytes & Codes",
     locale: "en_UK",
     type: "website",

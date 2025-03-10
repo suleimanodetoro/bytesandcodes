@@ -87,7 +87,7 @@ const Footer = () => {
     },
     {
       icon: Mail,
-      href: "mailto:info@bytesandcodes.com",
+      href: "mailto:info@bytesandcodes.org",
       label: "Email",
     },
   ];

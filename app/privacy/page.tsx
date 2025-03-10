@@ -281,12 +281,12 @@ const PrivacyPolicyPage = () => {
                 don't hesitate to contact us.
               </p>
               <a
-                href="mailto:info@bytesandcodes.com"
+                href="mailto:info@bytesandcodes.org"
                 className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 
-                         transition-colors font-medium"
+           transition-colors font-medium"
               >
                 <Mail size={20} />
-                info@bytesandcodes.com
+                info@bytesandcodes.org
               </a>
             </div>
           </div>

@@ -1,120 +1,129 @@
 //app/contact/page.tsx
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { Mail, Phone, MapPin, Send, LoaderCircle, AlertCircle } from 'lucide-react';
-import type { ContactFormData, FormFieldProps } from '@/types/forms';
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Send,
+  LoaderCircle,
+  AlertCircle,
+} from "lucide-react";
+import type { ContactFormData, FormFieldProps } from "@/types/forms";
 
 // Form validation schema
 const contactFormSchema = z.object({
-  name: z.string()
-    .min(2, 'Name must be at least 2 characters')
-    .max(50, 'Name must be less than 50 characters'),
-  email: z.string()
-    .email('Please enter a valid email address'),
-  subject: z.string()
-    .min(5, 'Subject must be at least 5 characters')
-    .max(100, 'Subject must be less than 100 characters'),
-  message: z.string()
-    .min(10, 'Message must be at least 10 characters')
-    .max(1000, 'Message must be less than 1000 characters'),
+  name: z
+    .string()
+    .min(2, "Name must be at least 2 characters")
+    .max(50, "Name must be less than 50 characters"),
+  email: z.string().email("Please enter a valid email address"),
+  subject: z
+    .string()
+    .min(5, "Subject must be at least 5 characters")
+    .max(100, "Subject must be less than 100 characters"),
+  message: z
+    .string()
+    .min(10, "Message must be at least 10 characters")
+    .max(1000, "Message must be less than 1000 characters"),
   honeypot: z.string().max(0), // Spam prevention - should be empty
-  timestamp: z.number() // For spam prevention
+  timestamp: z.number(), // For spam prevention
 });
 
 // Form field component
-const FormField = ({ 
-    label, 
-    name, 
-    type = 'text',
-    placeholder,
-    textarea = false,
-    register,
-    errors,
-  }: FormFieldProps) => {
-    const error = errors[name];
-    const Component = textarea ? 'textarea' : 'input';
-  
-    return (
-      <div>
-        <label className="block text-sm font-medium text-secondary-700 mb-2">
-          {label}
-        </label>
-        <div className="relative">
-          <Component
-            {...register(name)}
-            type={type}
-            placeholder={placeholder}
-            rows={textarea ? 6 : undefined}
-            className={`
+const FormField = ({
+  label,
+  name,
+  type = "text",
+  placeholder,
+  textarea = false,
+  register,
+  errors,
+}: FormFieldProps) => {
+  const error = errors[name];
+  const Component = textarea ? "textarea" : "input";
+
+  return (
+    <div>
+      <label className="block text-sm font-medium text-secondary-700 mb-2">
+        {label}
+      </label>
+      <div className="relative">
+        <Component
+          {...register(name)}
+          type={type}
+          placeholder={placeholder}
+          rows={textarea ? 6 : undefined}
+          className={`
               w-full px-4 py-3 rounded-lg border
-              ${error ? 'border-red-300' : 'border-secondary-200'}
+              ${error ? "border-red-300" : "border-secondary-200"}
               focus:ring-2 focus:ring-primary-500 focus:border-transparent
               placeholder-secondary-400
-              ${textarea ? 'resize-none' : ''}
+              ${textarea ? "resize-none" : ""}
             `}
-          />
-          {error && (
-            <div className="absolute right-0 top-0 pr-3 pt-3">
-              <AlertCircle className="h-5 w-5 text-red-500" />
-            </div>
-          )}
-        </div>
+        />
         {error && (
-          <p className="mt-1 text-sm text-red-600">{error.message}</p>
+          <div className="absolute right-0 top-0 pr-3 pt-3">
+            <AlertCircle className="h-5 w-5 text-red-500" />
+          </div>
         )}
       </div>
-    );
+      {error && <p className="mt-1 text-sm text-red-600">{error.message}</p>}
+    </div>
+  );
 };
 
 const ContactPage = () => {
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   const defaultValues = {
-    name: '',
-    email: '',
-    subject: '',
-    message: '',
-    honeypot: '',
-    timestamp: Date.now() // Initial load timestamp
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+    honeypot: "",
+    timestamp: Date.now(), // Initial load timestamp
   };
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset
+    reset,
   } = useForm<ContactFormData>({
     resolver: zodResolver(contactFormSchema),
-    defaultValues
+    defaultValues,
   });
 
   const onSubmit = async (data: ContactFormData) => {
-    setStatus('loading');
-    setErrorMessage('');
-    
+    setStatus("loading");
+    setErrorMessage("");
+
     try {
       // Add artificial delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
       const submissionData = {
         ...data,
-        timestamp: Date.now() // Fresh timestamp for submission
+        timestamp: Date.now(), // Fresh timestamp for submission
       };
 
-      console.log('Form submission attempt:', {
+      console.log("Form submission attempt:", {
         timeSinceLoad: submissionData.timestamp - defaultValues.timestamp,
-        timestamp: new Date(submissionData.timestamp).toISOString()
+        timestamp: new Date(submissionData.timestamp).toISOString(),
       });
 
-      const response = await fetch('/api/contact', {
-        method: 'POST',
+      const response = await fetch("/api/contact", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(submissionData),
       });
@@ -123,30 +132,30 @@ const ContactPage = () => {
 
       // Handle specific status codes
       if (response.status === 429) {
-        throw new Error('Too many attempts. Please try again later.');
+        throw new Error("Too many attempts. Please try again later.");
       }
 
       if (response.status === 400) {
-        throw new Error('Invalid submission. Please try again.');
+        throw new Error("Invalid submission. Please try again.");
       }
 
       if (!response.ok || !result.success) {
-        throw new Error(result.message || 'Failed to send message');
+        throw new Error(result.message || "Failed to send message");
       }
 
-      setStatus('success');
+      setStatus("success");
       reset(defaultValues); // Reset with fresh timestamp
-      
+
       setTimeout(() => {
-        setStatus('idle');
+        setStatus("idle");
       }, 5000);
     } catch (error) {
-      console.error('Form submission error:', error);
-      setStatus('error');
+      console.error("Form submission error:", error);
+      setStatus("error");
       setErrorMessage(
-        error instanceof Error 
-          ? error.message 
-          : 'An unexpected error occurred. Please try again.'
+        error instanceof Error
+          ? error.message
+          : "An unexpected error occurred. Please try again."
       );
     }
   };
@@ -160,8 +169,8 @@ const ContactPage = () => {
             Contact Us
           </h1>
           <p className="text-xl text-secondary-600 max-w-2xl">
-            Have questions about our programs or want to get involved? 
-            We'd love to hear from you. Reach out using the form below.
+            Have questions about our programs or want to get involved? We'd love
+            to hear from you. Reach out using the form below.
           </p>
         </div>
       </section>
@@ -173,22 +182,22 @@ const ContactPage = () => {
             {[
               {
                 icon: Mail,
-                title: 'Email',
-                details: 'contact@bytesandcodes.org',
-                description: 'Write to us anytime'
+                title: "Email",
+                details: "info@bytesandcodes.org",
+                description: "Write to us anytime",
               },
               {
                 icon: Phone,
-                title: 'Phone',
-                details: '+234 809 999 9999',
-                description: 'Mon-Fri from 9am to 5pm'
+                title: "Connect With Us",
+                details: "Social Media",
+                description: "Reach out on Twitter, LinkedIn, or Instagram",
               },
               {
                 icon: MapPin,
-                title: 'Location',
-                details: 'Abuja, Nigeria',
-                description: 'Request a visit'
-              }
+                title: "Operations",
+                details: "Pan-African",
+                description: "Working across Africa remotely",
+              },
             ].map((item) => (
               <div key={item.title} className="flex gap-4">
                 <div className="flex-shrink-0">
@@ -197,9 +206,15 @@ const ContactPage = () => {
                   </div>
                 </div>
                 <div>
-                  <h3 className="font-bold text-secondary-900 mb-1">{item.title}</h3>
-                  <p className="text-primary-600 font-medium mb-1">{item.details}</p>
-                  <p className="text-secondary-600 text-sm">{item.description}</p>
+                  <h3 className="font-bold text-secondary-900 mb-1">
+                    {item.title}
+                  </h3>
+                  <p className="text-primary-600 font-medium mb-1">
+                    {item.details}
+                  </p>
+                  <p className="text-secondary-600 text-sm">
+                    {item.description}
+                  </p>
                 </div>
               </div>
             ))}
@@ -209,20 +224,20 @@ const ContactPage = () => {
           <div className="md:col-span-2">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               {/* Honeypot field - hidden from users but visible to bots */}
-              <div className="absolute -left-[9999px] -top-[9999px]" aria-hidden="true">
+              <div
+                className="absolute -left-[9999px] -top-[9999px]"
+                aria-hidden="true"
+              >
                 <input
                   type="text"
-                  {...register('honeypot')}
+                  {...register("honeypot")}
                   tabIndex={-1}
                   autoComplete="off"
                 />
               </div>
 
               {/* Timestamp field - hidden */}
-              <input
-                type="hidden"
-                {...register('timestamp')}
-              />
+              <input type="hidden" {...register("timestamp")} />
 
               <div className="grid md:grid-cols-2 gap-6">
                 <FormField
@@ -241,7 +256,7 @@ const ContactPage = () => {
                   errors={errors}
                 />
               </div>
-              
+
               <FormField
                 label="Subject"
                 name="subject"
@@ -259,7 +274,7 @@ const ContactPage = () => {
                 errors={errors}
               />
 
-              {status === 'success' && (
+              {status === "success" && (
                 <div className="p-4 bg-green-50 text-green-700 rounded-lg flex items-center gap-2">
                   <div className="flex-shrink-0">✓</div>
                   <div>
@@ -269,24 +284,27 @@ const ContactPage = () => {
                 </div>
               )}
 
-              {status === 'error' && (
+              {status === "error" && (
                 <div className="p-4 bg-red-50 text-red-700 rounded-lg flex items-center gap-2">
                   <AlertCircle className="flex-shrink-0" />
                   <div>
                     <p className="font-medium">Failed to send message</p>
-                    <p className="text-sm">{errorMessage || 'Please try again later or contact us directly.'}</p>
+                    <p className="text-sm">
+                      {errorMessage ||
+                        "Please try again later or contact us directly."}
+                    </p>
                   </div>
                 </div>
               )}
 
               <button
                 type="submit"
-                disabled={status === 'loading'}
+                disabled={status === "loading"}
                 className="w-full md:w-auto px-8 py-3 bg-primary-600 text-white rounded-lg
                          hover:bg-primary-700 transition-colors flex items-center justify-center
                          disabled:bg-primary-300"
               >
-                {status === 'loading' ? (
+                {status === "loading" ? (
                   <>
                     <LoaderCircle className="animate-spin mr-2" size={18} />
                     Sending...

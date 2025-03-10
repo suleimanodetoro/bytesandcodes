@@ -98,7 +98,7 @@ export async function POST(request: Request) {
     // Send admin notification
     try {
       const adminEmailResult = await resend.emails.send({
-        from: "Contact Form <contact@bytesandcodes.org>",
+        from: "Contact Form <info@bytesandcodes.org>",
         to: [process.env.ADMIN_EMAIL!],
         ...emailTemplates.contactForm.adminNotification(validatedData),
       });
