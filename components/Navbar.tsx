@@ -17,57 +17,46 @@ interface NavItemProps {
   isActive: boolean;
 }
 
-const NavItem: React.FC<NavItemProps> = ({
-  href,
-  label,
-  subItems,
-  isActive,
-}) => {
+const NavItem: React.FC<NavItemProps> = ({ href, label, subItems, isActive }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         setIsOpen(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
-    <div className="relative" ref={dropdownRef}>
+    <div
+      className="relative"
+      ref={dropdownRef}
+      onMouseEnter={() => setIsOpen(true)}
+      onMouseLeave={() => setIsOpen(false)}
+    >
       <Link
         href={href}
         className={`
           px-3 py-2 rounded-lg transition-colors duration-200 flex items-center
-          ${
-            isActive
-              ? "text-primary-600 font-medium"
-              : "text-secondary-600 hover:text-primary-600"
+          ${isActive
+            ? "text-primary-600 font-medium"
+            : "text-secondary-600 hover:text-primary-600"
           }
         `}
-        onMouseEnter={() => setIsOpen(true)}
       >
         {label}
-        {subItems && (
-          <ChevronDown size={16} className="ml-1 text-secondary-400" />
-        )}
+        {subItems && <ChevronDown size={16} className="ml-1 text-secondary-400" />}
       </Link>
 
       {subItems && isOpen && (
         <div
-          className="absolute left-0 mt-1 w-56 bg-white rounded-lg shadow-lg border border-secondary-100 py-2 z-50"
-          onMouseLeave={() => setIsOpen(false)}
+          className="absolute left-0 top-full w-56 bg-white rounded-lg shadow-lg border border-secondary-100 py-2 z-50"
         >
-          {subItems.map((item) => (
+          {subItems.map(item => (
             <Link
               key={item.href}
               href={item.href}
@@ -82,6 +71,7 @@ const NavItem: React.FC<NavItemProps> = ({
   );
 };
 
+
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [openSubMenu, setOpenSubMenu] = useState<string | null>(null);
@@ -93,7 +83,6 @@ const Navbar: React.FC = () => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 0);
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -112,8 +101,9 @@ const Navbar: React.FC = () => {
       href: "/programs",
       label: "Programs",
       subItems: [
-        { href: "/programs/scholarship", label: "University Scholarship" },
-        { href: "/programs/hackathon", label: "Hackathon" },
+        { href: "/programs/grant",      label: "Tech Grant" },
+        { href: "/programs/mentorship", label: "University Mentorship" },
+        { href: "/programs/hackathon",  label: "Future Hackathons" },
       ],
     },
     { href: "/contact", label: "Contact" },
@@ -141,26 +131,20 @@ const Navbar: React.FC = () => {
             >
               {/* Center square */}
               <rect x="8" y="8" width="8" height="8" />
-
-              {/* Circuit connections - horizontal and vertical */}
+              {/* Circuit connections */}
               <line x1="2" y1="12" x2="8" y2="12" />
               <line x1="16" y1="12" x2="22" y2="12" />
               <line x1="12" y1="2" x2="12" y2="8" />
               <line x1="12" y1="16" x2="12" y2="22" />
-
-              {/* Circular nodes on circuit connections */}
               <circle cx="2" cy="12" r="1" />
               <circle cx="22" cy="12" r="1" />
               <circle cx="12" cy="2" r="1" />
               <circle cx="12" cy="22" r="1" />
-
-              {/* Diagonal connections */}
+              {/* Diagonals */}
               <line x1="4" y1="4" x2="8" y2="8" />
               <line x1="20" y1="4" x2="16" y2="8" />
               <line x1="4" y1="20" x2="8" y2="16" />
               <line x1="20" y1="20" x2="16" y2="16" />
-
-              {/* Circular nodes on diagonal connections */}
               <circle cx="4" cy="4" r="1" />
               <circle cx="20" cy="4" r="1" />
               <circle cx="4" cy="20" r="1" />
@@ -173,18 +157,16 @@ const Navbar: React.FC = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-2">
-            {navItems.map((item) => (
+            {navItems.map(item => (
               <NavItem
                 key={item.href}
                 {...item}
                 isActive={pathname === item.href}
               />
             ))}
-            {/* Donate Button */}
             <Link
               href="/donate"
-              className="ml-4 px-6 py-2 bg-primary-600 text-white rounded-lg 
-                         hover:bg-primary-700 transition-colors font-medium"
+              className="ml-4 px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium"
             >
               Donate
             </Link>
@@ -215,7 +197,7 @@ const Navbar: React.FC = () => {
 
               {/* Mobile Menu Items */}
               <div className="mt-8 flex flex-col space-y-4">
-                {navItems.map((item) => (
+                {navItems.map(item => (
                   <div key={item.href}>
                     <div className="flex items-center justify-between">
                       <Link
@@ -242,10 +224,9 @@ const Navbar: React.FC = () => {
                       )}
                     </div>
 
-                    {/* Mobile Submenu */}
                     {item.subItems && openSubMenu === item.href && (
                       <div className="ml-4 mt-2 space-y-2 border-l-2 border-primary-100 pl-4">
-                        {item.subItems.map((subItem) => (
+                        {item.subItems.map(subItem => (
                           <Link
                             key={subItem.href}
                             href={subItem.href}
@@ -262,8 +243,7 @@ const Navbar: React.FC = () => {
                 {/* Mobile Donate Button */}
                 <Link
                   href="/donate"
-                  className="mt-6 w-full px-6 py-3 bg-primary-600 text-white rounded-lg 
-                           hover:bg-primary-700 transition-colors font-medium text-center"
+                  className="mt-6 w-full px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium text-center"
                 >
                   Donate
                 </Link>

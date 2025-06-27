@@ -2,7 +2,7 @@
 "use client";
 
 import React from "react";
-import { Calendar, Users, Target, Blocks } from "lucide-react";
+import { Calendar, Users, Target, Blocks, School } from "lucide-react";
 import Link from "next/link";
 
 const MentorshipPage = () => {
@@ -10,26 +10,23 @@ const MentorshipPage = () => {
     <div className="min-h-screen bg-white py-24">
       <div className="max-w-7xl mx-auto px-4">
         <h1 className="text-5xl md:text-7xl font-bold text-primary-600 mb-8">
-          Cloud Mentorship Program
+          University Student Mentorship Program
         </h1>
 
         {/* Hero Section */}
         <div className="bg-primary-50 p-8 rounded-lg mb-12">
           <div className="max-w-3xl">
             <h2 className="text-2xl font-bold mb-4 text-secondary-900">
-              Join Our Mentorship Program
+              Guidance for Your Tech Journey
             </h2>
             <p className="text-secondary-600 mb-6">
-              Connect with experienced tech professionals who will guide you
-              through your journey in technology. Our mentorship program pairs
-              you with mentors who can help you achieve your career goals and
-              develop your skills.
+              Our program connects ambitious university students from across Nigeria with experienced tech professionals. Get personalized guidance, grow your network, and build the skills you need to launch a successful career in technology.
             </p>
             <Link
               href="/programs/mentorship/apply"
               className="inline-block bg-primary-600 text-white px-8 py-3 rounded-lg hover:bg-primary-700 transition-colors"
             >
-              Apply Now
+              Apply to be a Mentee
             </Link>
           </div>
         </div>
@@ -45,22 +42,22 @@ const MentorshipPage = () => {
                 {
                   icon: Calendar,
                   title: "1-on-1 Sessions",
-                  description: "Regular one-on-one meetings with your mentor",
+                  description: "Regular, dedicated meetings with your mentor.",
                 },
                 {
                   icon: Users,
                   title: "Network Growth",
-                  description: "Access to a community of tech professionals",
+                  description: "Access to a curated community of tech professionals and peers.",
                 },
                 {
                   icon: Target,
                   title: "Career Guidance",
-                  description: "Personalized career development advice",
+                  description: "Personalized advice on career paths, resumes, and interviews.",
                 },
                 {
                   icon: Blocks,
                   title: "Skill Development",
-                  description: "Structured learning paths and project guidance",
+                  description: "Structured learning paths and hands-on project guidance.",
                 },
               ].map((benefit, index) => (
                 <li key={index} className="flex items-start gap-4">
@@ -80,145 +77,64 @@ const MentorshipPage = () => {
 
           <div className="bg-white border border-secondary-200 rounded-lg p-6">
             <h3 className="text-xl font-bold mb-4 text-secondary-900">
-              Program Structure
+              Who Should Apply?
             </h3>
-            <div className="space-y-6">
-              <div>
-                <h4 className="font-semibold text-secondary-900 mb-2">
-                  Duration
-                </h4>
-                <p className="text-secondary-600">
-                  6-month commitment with possibility of extension
-                </p>
-              </div>
-              <div>
-                <h4 className="font-semibold text-secondary-900 mb-2">
-                  Meeting Frequency
-                </h4>
-                <p className="text-secondary-600">
-                  Bi-weekly 1-hour sessions with your mentor
-                </p>
-              </div>
-              <div>
-                <h4 className="font-semibold text-secondary-900 mb-2">
-                  Program Components
-                </h4>
-                <ul className="list-disc list-inside text-secondary-600 space-y-2">
-                  <li>Personal goal setting and tracking</li>
-                  <li>Project-based learning</li>
-                  <li>Technical skill development</li>
-                  <li>Career planning and guidance</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Eligibility Section */}
-        <div className="bg-primary-50 p-8 rounded-lg mb-12">
-          <h3 className="text-2xl font-bold mb-6 text-secondary-900">
-            Eligibility Requirements
-          </h3>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div>
-              <h4 className="font-semibold text-secondary-900 mb-4">
-                Who Can Apply
-              </h4>
-              <ul className="space-y-3 text-secondary-600">
-                <li className="flex items-start gap-2">
-                  <span className="text-primary-600">✓</span>
-                  Students and early-career professionals
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-primary-600">✓</span>
-                  Strong interest in technology
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-primary-600">✓</span>
-                  Commitment to learning and growth
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-primary-600">✓</span>
-                  Based in or around Africa
-                </li>
+             <ul className="space-y-3 text-secondary-600 list-disc list-inside">
+                <li>Currently enrolled university students in Nigeria.</li>
+                <li>Passionate about building a career in any technology field.</li>
+                <li>Committed to learning, growth, and receiving constructive feedback.</li>
+                <li>Willing to dedicate at least 4 hours per month to the program.</li>
               </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold text-secondary-900 mb-4">
-                Requirements
-              </h4>
-              <ul className="space-y-3 text-secondary-600">
-                <li className="flex items-start gap-2">
-                  <span className="text-primary-600">✓</span>
-                  Minimum 5 hours/week commitment
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-primary-600">✓</span>
-                  Access to computer and stable internet
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-primary-600">✓</span>
-                  Basic understanding of programming
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-primary-600">✓</span>
-                  Strong communication skills
-                </li>
-              </ul>
-            </div>
           </div>
         </div>
 
         {/* Application Process */}
         <div className="bg-white border border-secondary-200 rounded-lg p-8">
-          <h3 className="text-2xl font-bold mb-6 text-secondary-900">
-            Application Process
+          <h3 className="text-2xl font-bold mb-6 text-secondary-900 text-center">
+            How to Apply
           </h3>
-          <div className="space-y-6">
-            <div className="flex flex-col md:flex-row gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
               {[
                 {
                   step: "1",
                   title: "Submit Application",
                   description:
-                    "Fill out our detailed application form sharing your background and goals",
+                    "Fill out our straightforward application form so we can understand your background and goals.",
                 },
                 {
                   step: "2",
-                  title: "Initial Review",
+                  title: "Application Review",
                   description:
-                    "Our team reviews your application and assesses program fit",
+                    "Our team carefully reviews your application to ensure alignment with the program.",
                 },
                 {
                   step: "3",
-                  title: "Interview",
+                  title: "Matching Process",
                   description:
-                    "Selected candidates participate in a brief interview",
+                    "If selected, we search our network for a mentor whose experience matches your aspirations.",
                 },
                 {
                   step: "4",
-                  title: "Matching",
+                  title: "Program Kick-off",
                   description:
-                    "Successful applicants are matched with suitable mentors",
+                    "You're introduced to your mentor and begin your collaborative journey.",
                 },
-              ].map((phase, index) => (
-                <div key={index} className="flex-1">
-                  <div className="flex items-center gap-4 mb-2">
-                    <span className="w-8 h-8 rounded-full bg-primary-600 text-white flex items-center justify-center font-bold">
+              ].map((phase) => (
+                <div key={phase.step} className="flex flex-col items-center">
+                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-primary-600 text-white font-bold text-xl mb-4">
                       {phase.step}
-                    </span>
-                    <h4 className="font-semibold text-secondary-900">
-                      {phase.title}
-                    </h4>
                   </div>
-                  <p className="text-secondary-600 ml-12">
+                  <h4 className="font-semibold text-secondary-900 mb-2">
+                    {phase.title}
+                  </h4>
+                   <p className="text-secondary-600 text-sm">
                     {phase.description}
                   </p>
                 </div>
               ))}
             </div>
 
-            <div className="text-center pt-8">
+            <div className="text-center pt-10">
               <Link
                 href="/programs/mentorship/apply"
                 className="inline-block bg-primary-600 text-white px-8 py-3 rounded-lg hover:bg-primary-700 transition-colors"
@@ -226,7 +142,6 @@ const MentorshipPage = () => {
                 Start Your Application
               </Link>
             </div>
-          </div>
         </div>
       </div>
     </div>
